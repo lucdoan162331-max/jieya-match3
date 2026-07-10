@@ -1,5 +1,5 @@
-import { drawCrystalTile } from './tile-art.js?v=20260710d';
-import { getTileSet } from './tile-sets.js?v=20260710d';
+import { drawCrystalTile } from './tile-art.js?v=20260710e';
+import { getTileSet } from './tile-sets.js?v=20260710e';
 
 export class Renderer {
   constructor(canvas) {
@@ -16,9 +16,9 @@ export class Renderer {
   }
 
   resize(containerWidth, containerHeight, gridSize) {
-    const padding = 8;
-    const availW = Math.max(containerWidth - padding * 2, 280);
-    const availH = Math.max(containerHeight - padding * 2, 280);
+    const padding = 2;
+    const availW = Math.max(containerWidth - padding * 2, 300);
+    const availH = Math.max(containerHeight - padding * 2, 300);
     const cellSize = Math.floor(Math.min(availW, availH) / gridSize);
     const boardSize = cellSize * gridSize;
 
