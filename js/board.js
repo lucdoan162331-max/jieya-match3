@@ -1,4 +1,4 @@
-import { TILE, GRID_SIZE, MATCH_MIN } from './config.js';
+import { TILE, GRID_SIZE, MATCH_MIN } from './config.js?v=20260710d';
 
 export class Board {
   constructor(size = GRID_SIZE, weights = null) {
