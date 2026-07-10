@@ -51,12 +51,13 @@ export const TILE_SETS = {
     label: '锅锅厨房',
     tiles: [
       { key: 'wok', name: '飞天锅锅', tags: ['pot'] },
-      { key: 'pan', name: '平底锅', tags: ['pot'] },
       { key: 'egg', name: '荷包蛋', tags: [] },
+      { key: 'tomato', name: '小番茄', tags: [] },
       { key: 'spatula', name: '金铲子', tags: [] },
-      { key: 'pepper', name: '调料瓶', tags: [] },
+      { key: 'pepper', name: '小辣椒', tags: [] },
     ],
-    weights: [30, 20, 20, 15, 15],
+    // 锅锅略多方便弹射关，但其余四种区分度高
+    weights: [26, 20, 20, 17, 17],
   },
   golden: {
     label: '黄金甜点',
