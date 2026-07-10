@@ -1,5 +1,5 @@
-import * as Extra from './tile-icons-extra.js?v=20260710d';
-import { drawVividIcon } from './tile-icons-vivid.js?v=20260710d';
+import * as Extra from './tile-icons-extra.js?v=20260710e';
+import { drawVividIcon } from './tile-icons-vivid.js?v=20260710e';
 
 /** 浅色消消乐方块调色板 — bg 极浅底，border 描边，accent 点缀 */
 export const PALETTES_BY_KEY = {
@@ -29,6 +29,7 @@ export const PALETTES_BY_KEY = {
   egg: { bg: '#FFFDE7', border: '#FFF59D', accent: '#FBC02D', shadow: 'rgba(251,192,45,0.22)' },
   spatula: { bg: '#FFF8E1', border: '#FFE082', accent: '#FF8F00', shadow: 'rgba(255,143,0,0.2)' },
   pepper: { bg: '#FFEBEE', border: '#EF9A9A', accent: '#C62828', shadow: 'rgba(198,40,40,0.2)' },
+  tomato: { bg: '#FFEBEE', border: '#EF9A9A', accent: '#E53935', shadow: 'rgba(229,57,53,0.22)' },
   goldenpie: { bg: '#FFFDE7', border: '#FFD54F', accent: '#FFA000', shadow: 'rgba(255,160,0,0.25)' },
   pie: { bg: '#FFFDE7', border: '#FFD54F', accent: '#FFA000', shadow: 'rgba(255,160,0,0.25)' },
   pancake: { bg: '#FFF8E1', border: '#FFCC80', accent: '#FB8C00', shadow: 'rgba(251,140,0,0.2)' },
@@ -541,7 +542,7 @@ export function drawCrystalTile(ctx, artKey, x, y, size, stunned = false) {
   ctx.stroke();
   ctx.restore();
 
-  drawVividIcon(ctx, artKey, x, y, blockSize * 0.78);
+  drawVividIcon(ctx, artKey, x, y, blockSize * 0.88);
 
   if (stunned) {
     ctx.restore();
