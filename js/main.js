@@ -1,10 +1,10 @@
-import { Game, LEVELS } from './game.js?v=20260710d';
-import { pickEnding, getGoalDetail } from './levels.js?v=20260710d';
-import { SAVE_KEY, CAFFEINE_SHAKE_MS } from './config.js?v=20260710d';
-import { drawCrystalTile } from './tile-art.js?v=20260710d';
-import { getTileSet } from './tile-sets.js?v=20260710d';
-import { HealingBackground } from './background.js?v=20260710d';
-import { stopBgm } from './bgm.js?v=20260710d';
+import { Game, LEVELS } from './game.js?v=20260710e';
+import { pickEnding, getGoalDetail } from './levels.js?v=20260710e';
+import { SAVE_KEY, CAFFEINE_SHAKE_MS } from './config.js?v=20260710e';
+import { drawCrystalTile } from './tile-art.js?v=20260710e';
+import { getTileSet } from './tile-sets.js?v=20260710e';
+import { HealingBackground } from './background.js?v=20260710e';
+import { stopBgm, playCheer } from './bgm.js?v=20260710e';
 
 const bgCanvas = document.getElementById('bg-canvas');
 if (bgCanvas) new HealingBackground(bgCanvas).start();
@@ -170,8 +170,13 @@ function showLevelClear(g) {
   const reward = g.rewards.getClearReward(stars);
   const starStr = '★'.repeat(stars) + '☆'.repeat(3 - stars);
 
-  document.getElementById('clear-title').textContent = `${g.level.name} — ${reward.title}`;
-  document.getElementById('clear-desc').textContent = `${starStr}\n${reward.sub}`;
+  burstConfetti();
+  playCheer();
+  document.querySelector('.mascot-strip')?.classList.add('cheer');
+  setTimeout(() => document.querySelector('.mascot-strip')?.classList.remove('cheer'), 2000);
+
+  document.getElementById('clear-title').textContent = `${g.level.name}`;
+  document.getElementById('clear-desc').textContent = `🎉 ${reward.title}\n${starStr}\n${reward.sub}`;
 
   const stats = document.getElementById('clear-stats');
   stats.innerHTML = `
@@ -183,7 +188,7 @@ function showLevelClear(g) {
 
   const isLast = g.levelIndex >= LEVELS.length - 1;
   const btnNext = document.getElementById('btn-next-level');
-  btnNext.textContent = isLast ? '查看结局' : '下一关';
+  btnNext.textContent = isLast ? '查看结局' : '下一关 ✨';
   btnNext.onclick = () => {
     modal.classList.add('hidden');
     if (isLast) {
@@ -196,6 +201,23 @@ function showLevelClear(g) {
 
   modal.classList.remove('hidden');
   modal.classList.add('active');
+}
+
+function burstConfetti() {
+  const layer = document.getElementById('confetti-layer');
+  if (!layer) return;
+  layer.innerHTML = '';
+  const colors = ['#FF5FA2', '#FFC93C', '#5EC8FF', '#7CFFB2', '#FF8A65', '#CE93D8'];
+  for (let i = 0; i < 48; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = colors[i % colors.length];
+    p.style.animationDelay = (Math.random() * 0.4) + 's';
+    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+    layer.appendChild(p);
+  }
+  setTimeout(() => { layer.innerHTML = ''; }, 2000);
 }
 
 function showLevelFail() {
@@ -245,8 +267,8 @@ document.getElementById('btn-start').addEventListener('click', () => {
 
 function resumeAudioEarly() {
   try {
-    import('./audio.js').then((m) => m.resumeAudio());
-    import('./bgm.js').then((m) => m.startBgm?.('morning'));
+    import('./audio.js?v=20260710e').then((m) => m.resumeAudio());
+    import('./bgm.js?v=20260710e').then((m) => m.startBgm?.('morning'));
   } catch (_) { /* silent */ }
 }
 
