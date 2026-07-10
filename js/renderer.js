@@ -1,5 +1,5 @@
-import { drawCrystalTile } from './tile-art.js';
-import { getTileSet } from './tile-sets.js';
+import { drawCrystalTile } from './tile-art.js?v=20260710d';
+import { getTileSet } from './tile-sets.js?v=20260710d';
 
 export class Renderer {
   constructor(canvas) {
