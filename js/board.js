@@ -1,11 +1,11 @@
-import { TILE, GRID_SIZE, MATCH_MIN } from './config.js?v=20260710d';
+import { TILE, GRID_SIZE, MATCH_MIN } from './config.js?v=20260710e';
 
 export class Board {
   constructor(size = GRID_SIZE, weights = null) {
     this.size = size;
     this.weights = weights || [20, 20, 20, 20, 20];
     this.grid = [];
-    this.stunTimers = []; // [row][col] = expire timestamp
+    this.stunTimers = [];
     this.init();
   }
 
@@ -37,37 +37,46 @@ export class Board {
         do {
           tile = this.randomTile();
           attempts++;
-        } while (attempts < 50 && this.wouldCreateMatch(r, c, tile));
+        } while (attempts < 80 && this.wouldCreateMatch(r, c, tile));
         this.grid[r][c] = tile;
       }
     }
-    // 清除初始三连
-    while (this.findMatches().length > 0) {
-      for (const m of this.findMatches()) {
-        for (const { r, c } of m.cells) {
-          let t;
-          do { t = this.randomTile(); } while (this.wouldCreateMatch(r, c, t));
-          this.grid[r][c] = t;
-        }
+    // 兜底：若仍有三连则整盘重洗
+    let guard = 0;
+    while (this.findMatches().length > 0 && guard < 20) {
+      this._breakAllMatches();
+      guard++;
+    }
+    if (this.findMatches().length > 0 || !this.hasValidMoves()) {
+      // 最后手段：重新随机（限制递归）
+      if (!this._refilling) {
+        this._refilling = true;
+        this.fillNoMatches();
+        this._refilling = false;
+      }
+    }
+  }
+
+  _breakAllMatches() {
+    const matches = this.findMatches();
+    for (const m of matches) {
+      for (const { r, c } of m.cells) {
+        let t;
+        let attempts = 0;
+        do {
+          t = this.randomTile();
+          attempts++;
+        } while (attempts < 40 && this.wouldCreateMatch(r, c, t));
+        this.grid[r][c] = t;
       }
     }
   }
 
   wouldCreateMatch(r, c, tile) {
-    // 水平
-    if (c >= 2 &&
-        this.get(r, c - 1) === tile && this.get(r, c - 2) === tile) return true;
-    if (c >= 1 && c < this.size - 1 &&
-        this.get(r, c - 1) === tile && this.get(r, c + 1) === tile) return true;
-    if (c < this.size - 2 &&
-        this.get(r, c + 1) === tile && this.get(r, c + 2) === tile) return true;
-    // 垂直
-    if (r >= 2 &&
-        this.get(r - 1, c) === tile && this.get(r - 2, c) === tile) return true;
-    if (r >= 1 && r < this.size - 1 &&
-        this.get(r - 1, c) === tile && this.get(r + 1, c) === tile) return true;
-    if (r < this.size - 2 &&
-        this.get(r + 1, c) === tile && this.get(r + 2, c) === tile) return true;
+    // 水平：看左侧已有两连
+    if (c >= 2 && this.get(r, c - 1) === tile && this.get(r, c - 2) === tile) return true;
+    // 垂直：看上方已有两连
+    if (r >= 2 && this.get(r - 1, c) === tile && this.get(r - 2, c) === tile) return true;
     return false;
   }
 
@@ -104,10 +113,19 @@ export class Board {
     return r === 0 || r === this.size - 1 || c === 0 || c === this.size - 1;
   }
 
-  /** 找所有匹配组，返回 [{cells, type, size}] */
+  /**
+   * 找所有匹配：先收集所有 ≥3 连的格子，再按类型连通合并。
+   * 修复旧逻辑在 L/T 形时漏消的问题。
+   */
   findMatches() {
-    const matched = new Set();
-    const groups = [];
+    const matched = new Map(); // key -> {r,c,type}
+
+    const markRun = (cells, type) => {
+      if (cells.length < MATCH_MIN) return;
+      for (const cell of cells) {
+        matched.set(`${cell.r},${cell.c}`, { ...cell, type });
+      }
+    };
 
     // 水平
     for (let r = 0; r < this.size; r++) {
@@ -117,20 +135,9 @@ export class Board {
         if (tile < 0) { c++; continue; }
         let end = c + 1;
         while (end < this.size && this.get(r, end) === tile) end++;
-        const len = end - c;
-        if (len >= MATCH_MIN) {
-          const cells = [];
-          for (let i = c; i < end; i++) {
-            const key = `${r},${i}`;
-            if (!matched.has(key)) {
-              matched.add(key);
-              cells.push({ r, c: i });
-            }
-          }
-          if (cells.length >= MATCH_MIN) {
-            groups.push({ cells, type: tile, size: len });
-          }
-        }
+        const cells = [];
+        for (let i = c; i < end; i++) cells.push({ r, c: i });
+        markRun(cells, tile);
         c = end;
       }
     }
@@ -143,44 +150,19 @@ export class Board {
         if (tile < 0) { r++; continue; }
         let end = r + 1;
         while (end < this.size && this.get(end, c) === tile) end++;
-        const len = end - r;
-        if (len >= MATCH_MIN) {
-          const cells = [];
-          for (let i = r; i < end; i++) {
-            const key = `${i},${c}`;
-            if (!matched.has(key)) {
-              matched.add(key);
-              cells.push({ r: i, c });
-            }
-          }
-          if (cells.length >= MATCH_MIN) {
-            groups.push({ cells, type: tile, size: len });
-          }
-        }
+        const cells = [];
+        for (let i = r; i < end; i++) cells.push({ r: i, c });
+        markRun(cells, tile);
         r = end;
       }
     }
 
-    // 合并重叠的同类匹配
-    return this.mergeGroups(groups);
-  }
+    if (matched.size === 0) return [];
 
-  mergeGroups(groups) {
-    const cellMap = new Map();
-    for (const g of groups) {
-      for (const cell of g.cells) {
-        const key = `${cell.r},${cell.c}`;
-        if (!cellMap.has(key)) {
-          cellMap.set(key, { ...cell, type: g.type });
-        }
-      }
-    }
-    if (cellMap.size === 0) return [];
-
-    // BFS 连通分量
+    // BFS 按类型连通成组
     const visited = new Set();
     const result = [];
-    for (const [key, cell] of cellMap) {
+    for (const [key, cell] of matched) {
       if (visited.has(key)) continue;
       const type = cell.type;
       const cells = [];
@@ -189,12 +171,11 @@ export class Board {
       while (queue.length) {
         const cur = queue.shift();
         cells.push({ r: cur.r, c: cur.c });
-        const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
-        for (const [dr, dc] of dirs) {
+        for (const [dr, dc] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
           const nk = `${cur.r + dr},${cur.c + dc}`;
-          if (!visited.has(nk) && cellMap.has(nk) && cellMap.get(nk).type === type) {
+          if (!visited.has(nk) && matched.has(nk) && matched.get(nk).type === type) {
             visited.add(nk);
-            queue.push(cellMap.get(nk));
+            queue.push(matched.get(nk));
           }
         }
       }
@@ -211,6 +192,7 @@ export class Board {
     }
   }
 
+  /** 下落填充：尽量避免立刻形成新三连 */
   applyGravity() {
     const moves = [];
     for (let c = 0; c < this.size; c++) {
@@ -221,16 +203,19 @@ export class Board {
             moves.push({ from: { r, c }, to: { r: writeRow, c }, tile: this.grid[r][c] });
             this.grid[writeRow][c] = this.grid[r][c];
             this.grid[r][c] = TILE.EMPTY;
-            // 移动眩晕计时
             this.stunTimers[writeRow][c] = this.stunTimers[r][c];
             this.stunTimers[r][c] = 0;
           }
           writeRow--;
         }
       }
-      // 填充新方块
       for (let r = writeRow; r >= 0; r--) {
-        const tile = this.randomTile();
+        let tile;
+        let attempts = 0;
+        do {
+          tile = this.randomTile();
+          attempts++;
+        } while (attempts < 30 && this.wouldCreateMatch(r, c, tile));
         this.grid[r][c] = tile;
         moves.push({ from: { r: -1, c }, to: { r, c }, tile, isNew: true });
       }
@@ -238,17 +223,14 @@ export class Board {
     return moves;
   }
 
-  /** 甩锅：锅在边缘时飞到随机相邻格 */
   throwPot(fromR, fromC) {
     const neighbors = [];
-    const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
+    const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
     for (const [dr, dc] of dirs) {
       const nr = fromR + dr;
       const nc = fromC + dc;
-      if (nr > 0 && nr < this.size - 1 && nc > 0 && nc < this.size - 1) {
-        if (this.get(nr, nc) >= 0) {
-          neighbors.push({ r: nr, c: nc });
-        }
+      if (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size) {
+        if (this.get(nr, nc) >= 0) neighbors.push({ r: nr, c: nc });
       }
     }
     if (neighbors.length === 0) return null;
@@ -260,9 +242,9 @@ export class Board {
     for (let r = 0; r < this.size; r++) {
       for (let c = 0; c < this.size; c++) {
         if (this.isStunned(r, c)) continue;
-        const dirs = [[0,1],[1,0]];
-        for (const [dr, dc] of dirs) {
-          const nr = r + dr, nc = c + dc;
+        for (const [dr, dc] of [[0, 1], [1, 0]]) {
+          const nr = r + dr;
+          const nc = c + dc;
           if (nr < this.size && nc < this.size && !this.isStunned(nr, nc)) {
             this.swap(r, c, nr, nc);
             const matches = this.findMatches();
@@ -289,9 +271,7 @@ export class Board {
     let idx = 0;
     for (let r = 0; r < this.size; r++) {
       for (let c = 0; c < this.size; c++) {
-        if (this.get(r, c) >= 0) {
-          this.grid[r][c] = tiles[idx++];
-        }
+        if (this.get(r, c) >= 0) this.grid[r][c] = tiles[idx++];
       }
     }
     if (!this.hasValidMoves() || this.findMatches().length > 0) {
