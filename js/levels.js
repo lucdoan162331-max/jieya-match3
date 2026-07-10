@@ -1,4 +1,3 @@
-import { TILE } from './config.js';
 import { getTileDef } from './tile-sets.js';
 
 export const LEVELS = [
@@ -88,6 +87,69 @@ export function getGoalText(level) {
     case 'score_stress': return `得分 ${g.target}，能量≤${g.maxStress}`;
     default: return level.desc;
   }
+}
+
+/** 关卡目标进度详情 — 供 HUD 大面板使用 */
+export function getGoalDetail(level, progress, score, stress) {
+  const g = level.goal;
+  const tileName = (i) => getTileDef(level.tileSet, i).name;
+  let current = 0;
+  let target = g.target;
+  let sub = '';
+  let percent = 0;
+  let stressOk = true;
+
+  switch (g.type) {
+    case 'clear_total':
+      current = progress.clearedTotal;
+      sub = `已消除 ${current} / ${target} 个方块`;
+      percent = (current / target) * 100;
+      break;
+    case 'clear_type':
+      current = progress.clearedByType[g.tile] || 0;
+      sub = `已消除 ${current} / ${target} 个${tileName(g.tile)}`;
+      percent = (current / target) * 100;
+      break;
+    case 'clear_type_stress':
+      current = progress.clearedByType[g.tile] || 0;
+      stressOk = stress <= g.maxStress;
+      sub = `${tileName(g.tile)} ${current}/${target} · 能量 ${stress}/${g.maxStress}`;
+      percent = Math.min((current / target) * 100, stressOk ? 100 : (current / target) * 80);
+      break;
+    case 'trigger_caffeine':
+      current = progress.caffeineTriggers;
+      sub = `续命加速 ${current} / ${target} 次`;
+      percent = (current / target) * 100;
+      break;
+    case 'pot_throw':
+      current = progress.potThrows;
+      sub = `锅锅弹射 ${current} / ${target} 次`;
+      percent = (current / target) * 100;
+      break;
+    case 'pie_big_match':
+      current = progress.bigPieMatches;
+      sub = `大饼泡泡 ${current} / ${target} 次`;
+      percent = (current / target) * 100;
+      break;
+    case 'score_stress':
+      current = score;
+      stressOk = stress <= g.maxStress;
+      sub = `得分 ${score} / ${target} · 能量 ${stress}/${g.maxStress}`;
+      percent = Math.min((score / target) * 100, stressOk ? 100 : (score / target) * 80);
+      break;
+    default:
+      sub = level.desc;
+      percent = 0;
+  }
+
+  return {
+    main: getGoalText(level),
+    sub,
+    percent: Math.min(100, Math.max(0, percent)),
+    current,
+    target,
+    stressOk,
+  };
 }
 
 export function checkLevelGoal(level, progress) {
