@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#E8F4FF">
   <title>精神状态消消乐</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <link rel="stylesheet" href="css/style.css?v=20260710c">
+  <link rel="stylesheet" href="css/style.css?v=20260710d">
 </head>
 <body>
   <canvas id="bg-canvas" class="bg-canvas"></canvas>
@@ -37,6 +37,13 @@
     </div>
 
     <div id="screen-game" class="screen">
+      <div id="mascot-layer" class="mascot-layer" aria-hidden="true">
+        <div class="mascot m-snow" data-act="bounce">⛄</div>
+        <div class="mascot m-cola" data-act="thumbs">🥤</div>
+        <div class="mascot m-toast" data-act="jump">🍞</div>
+        <div class="mascot m-star" data-act="wave">⭐</div>
+        <div class="mascot m-mug" data-act="bounce">☕</div>
+      </div>
       <header class="game-header">
         <button id="btn-pause" class="btn-icon" aria-label="暂停">⏸</button>
         <div class="level-info">
@@ -132,6 +139,6 @@
     <div id="sfx-toast" class="sfx-toast"></div>
   </div>
 
-  <script type="module" src="js/main.js?v=20260710c"></script>
+  <script type="module" src="js/main.js?v=20260710d"></script>
 </body>
 </html>
