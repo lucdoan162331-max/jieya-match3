@@ -1,20 +1,20 @@
-import { Board } from './board.js';
-import { Renderer } from './renderer.js';
-import { LEVELS, checkLevelGoal, getGoalText } from './levels.js';
+import { Board } from './board.js?v=20260710d';
+import { Renderer } from './renderer.js?v=20260710d';
+import { LEVELS, checkLevelGoal, getGoalText } from './levels.js?v=20260710d';
 import {
   CAFFEINE_TRIGGER, CAFFEINE_DURATION, CAFFEINE_SHAKE_MS,
   POT_STUN_DURATION, MEETING_TAP_TARGET, MEETING_TAP_TIMEOUT,
   ANIM_SPEED_NORMAL, ANIM_SPEED_CAFFEINE, SAVE_KEY,
-} from './config.js';
+} from './config.js?v=20260710d';
 import {
   playMatchTile, playSwap, playInvalid, playPotThrow,
   playCaffeine, playMeetingTap, playWin,
   randomSfxLine, showSfxToast, resumeAudio,
-} from './audio.js';
-import { startBgm, stopBgm } from './bgm.js';
-import { MEETING_LINES } from './config.js';
-import { getTileSet, hasTag, getTileDef } from './tile-sets.js';
-import { RewardEngine } from './rewards.js';
+} from './audio.js?v=20260710d';
+import { startBgm, stopBgm } from './bgm.js?v=20260710d';
+import { MEETING_LINES } from './config.js?v=20260710d';
+import { getTileSet, hasTag, getTileDef } from './tile-sets.js?v=20260710d';
+import { RewardEngine } from './rewards.js?v=20260710d';
 
 export class Game {
   constructor(canvas, callbacks = {}) {
