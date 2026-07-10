@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#E8F4FF">
+  <meta name="theme-color" content="#7EC8FF">
   <title>精神状态消消乐</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <link rel="stylesheet" href="css/style.css?v=20260710d">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=20260710e">
 </head>
 <body>
   <canvas id="bg-canvas" class="bg-canvas"></canvas>
+  <div id="confetti-layer" class="confetti-layer" aria-hidden="true"></div>
   <div id="app">
     <div id="screen-start" class="screen active">
       <div class="start-content">
@@ -30,20 +34,13 @@
     <div id="screen-levels" class="screen">
       <header class="level-header">
         <h2>选择关卡</h2>
-        <p class="level-hint">每关元素主题不同 · 通关解锁专属结局</p>
+        <p class="level-hint">难度逐步升级 · 通关解锁专属结局</p>
       </header>
       <div id="level-list" class="level-list"></div>
       <div id="stats-bar" class="stats-bar"></div>
     </div>
 
     <div id="screen-game" class="screen">
-      <div id="mascot-layer" class="mascot-layer" aria-hidden="true">
-        <div class="mascot m-snow" data-act="bounce">⛄</div>
-        <div class="mascot m-cola" data-act="thumbs">🥤</div>
-        <div class="mascot m-toast" data-act="jump">🍞</div>
-        <div class="mascot m-star" data-act="wave">⭐</div>
-        <div class="mascot m-mug" data-act="bounce">☕</div>
-      </div>
       <header class="game-header">
         <button id="btn-pause" class="btn-icon" aria-label="暂停">⏸</button>
         <div class="level-info">
@@ -69,11 +66,19 @@
         <div id="goal-sub" class="goal-sub"></div>
       </div>
 
-        <div id="status-badges" class="status-badges"></div>
-        <div id="combo-bar" class="combo-bar hidden">
-          <span id="combo-label">连击</span>
-          <span id="combo-value">×1</span>
-        </div>
+      <div id="status-badges" class="status-badges"></div>
+      <div id="combo-bar" class="combo-bar hidden">
+        <span id="combo-label">连击</span>
+        <span id="combo-value">×1</span>
+      </div>
+
+      <div class="mascot-strip" aria-hidden="true">
+        <span class="mascot m-snow" data-act="bounce">⛄</span>
+        <span class="mascot m-toast" data-act="jump">🍞</span>
+        <span class="mascot m-star" data-act="wave">⭐</span>
+        <span class="mascot m-cola" data-act="thumbs">🥤</span>
+        <span class="mascot m-mug" data-act="bounce">☕</span>
+      </div>
 
       <div id="board-wrap" class="board-wrap">
         <canvas id="board-canvas"></canvas>
@@ -109,6 +114,7 @@
 
     <div id="screen-level-clear" class="screen overlay hidden">
       <div class="modal result-modal">
+        <div class="cheer-burst">🎉</div>
         <h2 id="clear-title">关卡完成！</h2>
         <p id="clear-desc" class="clear-desc"></p>
         <div id="clear-stats" class="clear-stats"></div>
@@ -139,6 +145,6 @@
     <div id="sfx-toast" class="sfx-toast"></div>
   </div>
 
-  <script type="module" src="js/main.js?v=20260710d"></script>
+  <script type="module" src="js/main.js?v=20260710e"></script>
 </body>
 </html>
