@@ -1,20 +1,20 @@
-import { Board } from './board.js?v=20260710d';
-import { Renderer } from './renderer.js?v=20260710d';
-import { LEVELS, checkLevelGoal, getGoalText } from './levels.js?v=20260710d';
+import { Board } from './board.js?v=20260710e';
+import { Renderer } from './renderer.js?v=20260710e';
+import { LEVELS, checkLevelGoal, getGoalText } from './levels.js?v=20260710e';
 import {
   CAFFEINE_TRIGGER, CAFFEINE_DURATION, CAFFEINE_SHAKE_MS,
   POT_STUN_DURATION, MEETING_TAP_TARGET, MEETING_TAP_TIMEOUT,
   ANIM_SPEED_NORMAL, ANIM_SPEED_CAFFEINE, SAVE_KEY,
-} from './config.js?v=20260710d';
+} from './config.js?v=20260710e';
 import {
   playMatchTile, playSwap, playInvalid, playPotThrow,
   playCaffeine, playMeetingTap, playWin,
   randomSfxLine, showSfxToast, resumeAudio,
-} from './audio.js?v=20260710d';
-import { startBgm, stopBgm } from './bgm.js?v=20260710d';
-import { MEETING_LINES } from './config.js?v=20260710d';
-import { getTileSet, hasTag, getTileDef } from './tile-sets.js?v=20260710d';
-import { RewardEngine } from './rewards.js?v=20260710d';
+} from './audio.js?v=20260710e';
+import { startBgm, stopBgm, playCheer } from './bgm.js?v=20260710e';
+import { MEETING_LINES } from './config.js?v=20260710e';
+import { getTileSet, hasTag, getTileDef } from './tile-sets.js?v=20260710e';
+import { RewardEngine } from './rewards.js?v=20260710e';
 
 export class Game {
   constructor(canvas, callbacks = {}) {
@@ -462,6 +462,7 @@ export class Game {
 
   onLevelClear() {
     playWin();
+    playCheer();
     if (!this.globalStats.clearedLevels.includes(this.level.id)) {
       this.globalStats.clearedLevels.push(this.level.id);
       this.globalStats.levelsCleared = this.globalStats.clearedLevels.length;
