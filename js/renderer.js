@@ -203,6 +203,57 @@ export class Renderer {
   clearHighlight() {
     this.highlightCells.clear();
   }
+
+  clearAnimations() {
+    this.animations = [];
+  }
+
+  _waitFrame(ms) {
+    return new Promise((r) => setTimeout(r, ms));
+  }
+
+  _easeInOut(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  _setSwapOffsets(r1, c1, r2, c2, progress, shakeX = 0) {
+    const cs = this.cellSize;
+    const dr = r2 - r1;
+    const dc = c2 - c1;
+    const ox = dc * cs * progress + shakeX;
+    const oy = dr * cs * progress;
+    this.animations = [
+      { r: r1, c: c1, dx: ox, dy: oy },
+      { r: r2, c: c2, dx: -ox, dy: -oy },
+    ];
+  }
+
+  /** 交换动画：revert=true 时抖动后归位 */
+  async animateSwap(r1, c1, r2, c2, { revert = false } = {}) {
+    const steps = 9;
+    const frameMs = 14;
+
+    for (let i = 0; i <= steps; i++) {
+      const t = this._easeInOut(i / steps);
+      this._setSwapOffsets(r1, c1, r2, c2, t);
+      await this._waitFrame(frameMs);
+    }
+
+    if (revert) {
+      for (let s = 0; s < 6; s++) {
+        const shake = (s % 2 === 0 ? 6 : -6);
+        this._setSwapOffsets(r1, c1, r2, c2, 1, shake);
+        await this._waitFrame(32);
+      }
+      for (let i = steps; i >= 0; i--) {
+        const t = this._easeInOut(i / steps);
+        this._setSwapOffsets(r1, c1, r2, c2, t);
+        await this._waitFrame(frameMs);
+      }
+    }
+
+    this.clearAnimations();
+  }
 }
 
 function roundRect(ctx, x, y, w, h, r) {
