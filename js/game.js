@@ -2,15 +2,16 @@ import { Board } from './board.js';
 import { Renderer } from './renderer.js';
 import { LEVELS, checkLevelGoal, getGoalText } from './levels.js';
 import {
-  TILE, CAFFEINE_TRIGGER, CAFFEINE_DURATION, CAFFEINE_SHAKE_MS,
+  CAFFEINE_TRIGGER, CAFFEINE_DURATION, CAFFEINE_SHAKE_MS,
   POT_STUN_DURATION, MEETING_TAP_TARGET, MEETING_TAP_TIMEOUT,
   ANIM_SPEED_NORMAL, ANIM_SPEED_CAFFEINE, SAVE_KEY,
 } from './config.js';
 import {
-  playMatch, playSwap, playInvalid, playPotThrow,
+  playMatchTile, playSwap, playInvalid, playPotThrow,
   playCaffeine, playMeetingTap, playWin,
   randomSfxLine, showSfxToast, resumeAudio,
 } from './audio.js';
+import { startBgm, stopBgm } from './bgm.js';
 import { MEETING_LINES } from './config.js';
 import { getTileSet, hasTag, getTileDef } from './tile-sets.js';
 import { RewardEngine } from './rewards.js';
@@ -103,6 +104,7 @@ export class Game {
     this.rewards.resetLevel();
 
     this.callbacks.onLevelStart?.(this);
+    startBgm(this.tileSetId);
     this._scheduleResize();
     this.loop();
   }
@@ -210,12 +212,15 @@ export class Game {
   async trySwap(r1, c1, r2, c2) {
     if (this.busy) return;
     this.renderer.setSelected(null);
+    this.busy = true;
 
     const tile1 = this.board.get(r1, c1);
     const tile2 = this.board.get(r2, c2);
-    if (tile1 < 0 || tile2 < 0) return;
+    if (tile1 < 0 || tile2 < 0) {
+      this.busy = false;
+      return;
+    }
 
-    // 甩锅大法：锅移到边缘
     const isPot = (idx) => hasTag(this.tileSetId, idx, 'pot');
     const potOnEdge =
       (isPot(tile1) && this.board.isOnEdge(r2, c2)) ||
@@ -224,23 +229,30 @@ export class Game {
     if (potOnEdge) {
       const potR = isPot(tile1) ? r2 : r1;
       const potC = isPot(tile1) ? c2 : c1;
+      const otherR = isPot(tile1) ? r1 : r2;
+      const otherC = isPot(tile1) ? c1 : c2;
+      const potIdx = isPot(tile1) ? tile1 : tile2;
 
       this.board.swap(r1, c1, r2, c2);
-      await this.handlePotThrow(potR, potC, otherR, otherC);
+      await this.renderer.animateSwap(r1, c1, r2, c2);
+      await this.handlePotThrow(potR, potC, otherR, otherC, potIdx);
       this.useMove();
       return;
     }
 
     this.board.swap(r1, c1, r2, c2);
-    const matches = this.board.findMatches();
+    playSwap();
+    await this.renderer.animateSwap(r1, c1, r2, c2);
 
+    const matches = this.board.findMatches();
     if (matches.length === 0) {
+      await this.renderer.animateSwap(r1, c1, r2, c2, { revert: true });
       this.board.swap(r1, c1, r2, c2);
       playInvalid();
+      this.busy = false;
       return;
     }
 
-    playSwap();
     this.useMove();
     await this.processMatches(matches);
   }
@@ -254,8 +266,7 @@ export class Game {
     this.checkEnd();
   }
 
-  async handlePotThrow(potR, potC, otherR, otherC) {
-    this.busy = true;
+  async handlePotThrow(potR, potC, otherR, otherC, potIdx) {
     playPotThrow();
     showSfxToast('锅锅弹射！');
 
@@ -273,7 +284,7 @@ export class Game {
         this.renderer.addParticle(
           fromPos.x + (toPos.x - fromPos.x) * i / 5,
           fromPos.y + (toPos.y - fromPos.y) * i / 5,
-          TILE.POT
+          potIdx
         );
       }
 
@@ -327,7 +338,12 @@ export class Game {
       // 去重
       const unique = [...new Map(allCells.map(c => [`${c.r},${c.c}`, c])).values()];
       this.renderer.setHighlight(unique);
-      playMatch(chainCount);
+
+      const matchTypes = [...new Set(matches.map((m) => m.type))];
+      matchTypes.forEach((typeIdx, i) => {
+        const key = this.tileSet.tiles[typeIdx]?.key || 'default';
+        setTimeout(() => playMatchTile(key, chainCount), i * 60);
+      });
       showSfxToast(randomSfxLine());
 
       // 冰美式连击 → 心悸模式
