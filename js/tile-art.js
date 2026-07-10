@@ -1,40 +1,40 @@
 import * as Extra from './tile-icons-extra.js';
 
-/** 按 artKey 的调色板 */
+/** 浅色消消乐方块调色板 — bg 极浅底，border 描边，accent 点缀 */
 export const PALETTES_BY_KEY = {
-  coffee: { base: '#3d2314', mid: '#8B5A2B', light: '#D4A574', rim: '#FFE4C4', glow: 'rgba(139,90,43,0.6)' },
-  americano: { base: '#3d2314', mid: '#8B5A2B', light: '#D4A574', rim: '#FFE4C4', glow: 'rgba(139,90,43,0.6)' },
-  toast: { base: '#8D6E63', mid: '#D7CCC8', light: '#EFEBE9', rim: '#FFF8E1', glow: 'rgba(215,204,200,0.5)' },
-  sun: { base: '#F57F17', mid: '#FFD54F', light: '#FFF9C4', rim: '#FFFDE7', glow: 'rgba(255,213,79,0.7)' },
-  alarm: { base: '#C2185B', mid: '#FF6B9D', light: '#F8BBD9', rim: '#FCE4EC', glow: 'rgba(255,107,157,0.5)' },
-  sticky: { base: '#F9A825', mid: '#FFF59D', light: '#FFFDE7', rim: '#FFF9C4', glow: 'rgba(255,245,157,0.5)' },
-  cola: { base: '#B71C1C', mid: '#E53935', light: '#FF8A80', rim: '#FFCDD2', glow: 'rgba(229,57,53,0.55)' },
-  watermelon: { base: '#2E7D32', mid: '#66BB6A', light: '#EF5350', rim: '#FFCDD2', glow: 'rgba(102,187,106,0.5)' },
-  popsicle: { base: '#0277BD', mid: '#4FC3F7', light: '#B3E5FC', rim: '#E1F5FE', glow: 'rgba(79,195,247,0.55)' },
-  fan: { base: '#AD1457', mid: '#F48FB1', light: '#FCE4EC', rim: '#FFF', glow: 'rgba(244,143,177,0.5)' },
-  soda: { base: '#0288D1', mid: '#4FC3F7', light: '#E1F5FE', rim: '#FFF', glow: 'rgba(79,195,247,0.5)' },
-  read: { base: '#0d6b4f', mid: '#1ABC9C', light: '#7FEFD4', rim: '#A8FFEB', glow: 'rgba(46,204,113,0.55)' },
-  emoji: { base: '#F9A825', mid: '#FFD54F', light: '#FFF9C4', rim: '#FFFDE7', glow: 'rgba(255,213,79,0.55)' },
-  heart: { base: '#C2185B', mid: '#FF6B9D', light: '#F8BBD9', rim: '#FCE4EC', glow: 'rgba(255,107,157,0.6)' },
-  voice: { base: '#2E7D32', mid: '#66BB6A', light: '#C8E6C9', rim: '#E8F5E9', glow: 'rgba(102,187,106,0.5)' },
-  bottle: { base: '#01579B', mid: '#4FC3F7', light: '#B3E5FC', rim: '#E1F5FE', glow: 'rgba(79,195,247,0.5)' },
-  latte: { base: '#5D4037', mid: '#A1887F', light: '#D7CCC8', rim: '#EFEBE9', glow: 'rgba(161,136,127,0.5)' },
-  energy: { base: '#1B5E20', mid: '#00E676', light: '#B9F6CA', rim: '#E8F5E9', glow: 'rgba(0,230,118,0.6)' },
-  cookie: { base: '#4E342E', mid: '#A1887F', light: '#D7CCC8', rim: '#EFEBE9', glow: 'rgba(161,136,127,0.4)' },
-  muffin: { base: '#4E342E', mid: '#8D6E63', light: '#FFCCBC', rim: '#FBE9E7', glow: 'rgba(141,110,99,0.5)' },
-  wok: { base: '#1a1a1a', mid: '#424242', light: '#757575', rim: '#9E9E9E', glow: 'rgba(66,66,66,0.5)' },
-  pan: { base: '#37474F', mid: '#78909C', light: '#B0BEC5', rim: '#ECEFF1', glow: 'rgba(120,144,156,0.5)' },
-  pot: { base: '#1a1a1a', mid: '#3d3d3d', light: '#6a6a6a', rim: '#9a9a9a', glow: 'rgba(80,80,80,0.5)' },
-  egg: { base: '#F9A825', mid: '#FFD54F', light: '#FFF8E1', rim: '#FFFDE7', glow: 'rgba(255,213,79,0.5)' },
-  spatula: { base: '#F57F17', mid: '#FFD54F', light: '#FFF9C4', rim: '#FFFDE7', glow: 'rgba(255,213,79,0.5)' },
-  pepper: { base: '#B71C1C', mid: '#EF5350', light: '#FFCDD2', rim: '#FFEBEE', glow: 'rgba(239,83,80,0.5)' },
-  goldenpie: { base: '#B8860B', mid: '#FFD700', light: '#FFF8DC', rim: '#FFFACD', glow: 'rgba(255,215,0,0.7)' },
-  pie: { base: '#B8860B', mid: '#FFD700', light: '#FFF8DC', rim: '#FFFACD', glow: 'rgba(255,215,0,0.7)' },
-  pancake: { base: '#F57F17', mid: '#FFD54F', light: '#FFF9C4', rim: '#FFFDE7', glow: 'rgba(255,213,79,0.6)' },
-  tart: { base: '#EF6C00', mid: '#FFB74D', light: '#FFE0B2', rim: '#FFF3E0', glow: 'rgba(255,183,77,0.55)' },
-  donut: { base: '#AD1457', mid: '#F48FB1', light: '#FCE4EC', rim: '#FFF', glow: 'rgba(244,143,177,0.55)' },
-  popcorn: { base: '#FF6B9D', mid: '#FFD54F', light: '#FFF9C4', rim: '#FFF', glow: 'rgba(255,213,79,0.55)' },
-  ppt: { base: '#6B3FA0', mid: '#B388FF', light: '#E1BEE7', rim: '#F3E5F5', glow: 'rgba(179,136,255,0.55)' },
+  coffee: { bg: '#FFF8F0', border: '#D7B896', accent: '#8B5A2B', shadow: 'rgba(139,90,43,0.18)' },
+  americano: { bg: '#FFF8F0', border: '#D7B896', accent: '#6F4E37', shadow: 'rgba(111,78,55,0.18)' },
+  toast: { bg: '#FFFBF5', border: '#E0C9A6', accent: '#C49A6C', shadow: 'rgba(196,154,108,0.2)' },
+  sun: { bg: '#FFFDE7', border: '#FFE082', accent: '#FFB300', shadow: 'rgba(255,179,0,0.22)' },
+  alarm: { bg: '#FFF0F5', border: '#F48FB1', accent: '#E91E63', shadow: 'rgba(233,30,99,0.18)' },
+  sticky: { bg: '#FFFDE7', border: '#FFF176', accent: '#F9A825', shadow: 'rgba(249,168,37,0.2)' },
+  cola: { bg: '#FFEBEE', border: '#EF9A9A', accent: '#D32F2F', shadow: 'rgba(211,47,47,0.2)' },
+  watermelon: { bg: '#F1F8E9', border: '#A5D6A7', accent: '#E53935', shadow: 'rgba(76,175,80,0.2)' },
+  popsicle: { bg: '#E3F2FD', border: '#90CAF9', accent: '#1E88E5', shadow: 'rgba(30,136,229,0.2)' },
+  fan: { bg: '#FCE4EC', border: '#F48FB1', accent: '#EC407A', shadow: 'rgba(236,64,122,0.18)' },
+  soda: { bg: '#E1F5FE', border: '#81D4FA', accent: '#039BE5', shadow: 'rgba(3,155,229,0.2)' },
+  read: { bg: '#E8F5E9', border: '#81C784', accent: '#2E7D32', shadow: 'rgba(46,125,50,0.18)' },
+  emoji: { bg: '#FFF8E1', border: '#FFE082', accent: '#FFA000', shadow: 'rgba(255,160,0,0.2)' },
+  heart: { bg: '#FCE4EC', border: '#F48FB1', accent: '#E91E63', shadow: 'rgba(233,30,99,0.18)' },
+  voice: { bg: '#E8F5E9', border: '#A5D6A7', accent: '#43A047', shadow: 'rgba(67,160,71,0.18)' },
+  bottle: { bg: '#E3F2FD', border: '#64B5F6', accent: '#1565C0', shadow: 'rgba(21,101,192,0.18)' },
+  latte: { bg: '#EFEBE9', border: '#BCAAA4', accent: '#6D4C41', shadow: 'rgba(109,76,65,0.18)' },
+  energy: { bg: '#E8F5E9', border: '#69F0AE', accent: '#00C853', shadow: 'rgba(0,200,83,0.22)' },
+  cookie: { bg: '#FFF3E0', border: '#FFCC80', accent: '#EF6C00', shadow: 'rgba(239,108,0,0.18)' },
+  muffin: { bg: '#FBE9E7', border: '#FFAB91', accent: '#BF360C', shadow: 'rgba(191,54,12,0.18)' },
+  wok: { bg: '#ECEFF1', border: '#90A4AE', accent: '#455A64', shadow: 'rgba(69,90,100,0.2)' },
+  pan: { bg: '#ECEFF1', border: '#B0BEC5', accent: '#546E7A', shadow: 'rgba(84,110,122,0.18)' },
+  pot: { bg: '#E8EAF6', border: '#9FA8DA', accent: '#3949AB', shadow: 'rgba(57,73,171,0.18)' },
+  egg: { bg: '#FFFDE7', border: '#FFF59D', accent: '#FBC02D', shadow: 'rgba(251,192,45,0.22)' },
+  spatula: { bg: '#FFF8E1', border: '#FFE082', accent: '#FF8F00', shadow: 'rgba(255,143,0,0.2)' },
+  pepper: { bg: '#FFEBEE', border: '#EF9A9A', accent: '#C62828', shadow: 'rgba(198,40,40,0.2)' },
+  goldenpie: { bg: '#FFFDE7', border: '#FFD54F', accent: '#FFA000', shadow: 'rgba(255,160,0,0.25)' },
+  pie: { bg: '#FFFDE7', border: '#FFD54F', accent: '#FFA000', shadow: 'rgba(255,160,0,0.25)' },
+  pancake: { bg: '#FFF8E1', border: '#FFCC80', accent: '#FB8C00', shadow: 'rgba(251,140,0,0.2)' },
+  tart: { bg: '#FFF3E0', border: '#FFCC80', accent: '#EF6C00', shadow: 'rgba(239,108,0,0.2)' },
+  donut: { bg: '#FCE4EC', border: '#F48FB1', accent: '#D81B60', shadow: 'rgba(216,27,96,0.18)' },
+  popcorn: { bg: '#FFF8E1', border: '#FFE082', accent: '#FF6F00', shadow: 'rgba(255,111,0,0.2)' },
+  ppt: { bg: '#F3E5F5', border: '#CE93D8', accent: '#8E24AA', shadow: 'rgba(142,36,170,0.18)' },
 };
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -457,40 +457,102 @@ const ICON_DRAWERS = {
 
 const GLOW_KEYS = new Set(['pie', 'goldenpie', 'pancake']);
 
-/** 绘制完整水晶方块 — artKey 驱动 */
+/** 消消乐方块 — 浅色底 + 白盘图标，图案清晰可读 */
+function drawMatchBlock(ctx, x, y, size, palette, extraGlow = false) {
+  const half = size / 2;
+  const bx = x - half;
+  const by = y - half;
+  const r = size * 0.22;
+
+  ctx.save();
+  if (extraGlow) {
+    ctx.shadowColor = palette.shadow;
+    ctx.shadowBlur = size * 0.2;
+  }
+
+  // 底部投影
+  ctx.fillStyle = 'rgba(0,0,0,0.08)';
+  roundRect(ctx, bx + 2, by + size * 0.06 + 2, size, size, r);
+  ctx.fill();
+
+  // 方块本体渐变
+  const bodyGrad = ctx.createLinearGradient(bx, by, bx, by + size);
+  bodyGrad.addColorStop(0, '#FFFFFF');
+  bodyGrad.addColorStop(0.35, palette.bg);
+  bodyGrad.addColorStop(1, palette.bg);
+  roundRect(ctx, bx, by, size, size, r);
+  ctx.fillStyle = bodyGrad;
+  ctx.fill();
+
+  // 顶部高光条
+  const hiGrad = ctx.createLinearGradient(bx, by, bx, by + size * 0.35);
+  hiGrad.addColorStop(0, 'rgba(255,255,255,0.85)');
+  hiGrad.addColorStop(1, 'rgba(255,255,255,0)');
+  roundRect(ctx, bx + 2, by + 2, size - 4, size * 0.38, r * 0.8);
+  ctx.fillStyle = hiGrad;
+  ctx.fill();
+
+  // 描边
+  ctx.strokeStyle = palette.border;
+  ctx.lineWidth = Math.max(1.5, size * 0.04);
+  roundRect(ctx, bx, by, size, size, r);
+  ctx.stroke();
+
+  // 内角 accent 点
+  ctx.fillStyle = palette.accent;
+  ctx.globalAlpha = 0.35;
+  ctx.beginPath();
+  ctx.arc(bx + size * 0.12, by + size * 0.12, size * 0.05, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+/** 绘制完整消消乐方块 — artKey 驱动 */
 export function drawCrystalTile(ctx, artKey, x, y, size, stunned = false) {
   const palette = PALETTES_BY_KEY[artKey];
   const drawer = ICON_DRAWERS[artKey];
   if (!palette || !drawer) return;
 
-  const radius = size / 2;
+  const blockSize = size * 0.92;
   const extraGlow = GLOW_KEYS.has(artKey);
 
   if (stunned) {
     ctx.save();
-    ctx.globalAlpha = 0.65;
+    ctx.globalAlpha = 0.7;
     ctx.translate(x, y);
-    ctx.rotate(Math.sin(Date.now() / 120) * 0.08);
+    ctx.rotate(Math.sin(Date.now() / 120) * 0.1);
     ctx.translate(-x, -y);
   }
 
-  drawCrystalGem(ctx, x, y, radius, palette, extraGlow);
+  drawMatchBlock(ctx, x, y, blockSize, palette, extraGlow);
+
+  // 白色图标底盘，保证图案与底色分离
+  const plateR = blockSize * 0.34;
+  ctx.save();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.shadowColor = 'rgba(0,0,0,0.06)';
+  ctx.shadowBlur = blockSize * 0.04;
+  ctx.beginPath();
+  ctx.arc(x, y, plateR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.restore();
 
   ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.35)';
-  ctx.shadowBlur = size * 0.06;
-  ctx.shadowOffsetY = size * 0.03;
-  drawer(ctx, x, y, size * 0.88);
+  drawer(ctx, x, y, blockSize * 0.72);
   ctx.restore();
 
   if (stunned) {
     ctx.restore();
     ctx.save();
-    ctx.font = `bold ${size * 0.28}px sans-serif`;
+    ctx.font = `bold ${blockSize * 0.26}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#FFE082';
-    ctx.fillText('★', x + radius * 0.55, y - radius * 0.55);
+    ctx.fillStyle = '#FFB300';
+    ctx.fillText('★', x + blockSize * 0.32, y - blockSize * 0.32);
     ctx.restore();
   }
 }
