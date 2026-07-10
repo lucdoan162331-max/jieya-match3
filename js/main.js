@@ -238,9 +238,17 @@ function showEnding(g) {
 }
 
 document.getElementById('btn-start').addEventListener('click', () => {
+  resumeAudioEarly();
   renderLevelList();
   showScreen('levels');
 });
+
+function resumeAudioEarly() {
+  try {
+    import('./audio.js').then((m) => m.resumeAudio());
+    import('./bgm.js').then((m) => m.startBgm?.('morning'));
+  } catch (_) { /* silent */ }
+}
 
 document.getElementById('btn-pause').addEventListener('click', () => {
   if (game) game.pause();
