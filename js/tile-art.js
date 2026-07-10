@@ -508,11 +508,22 @@ function drawMatchBlock(ctx, x, y, size, palette, extraGlow = false) {
   ctx.restore();
 }
 
-/** 绘制完整消消乐方块 — artKey 驱动 */
+/** 大号 emoji 保证手机上一眼可辨 */
+const TILE_EMOJI = {
+  coffee: '☕', americano: '☕', latte: '🧋', energy: '⚡',
+  toast: '🍞', sun: '☀️', alarm: '⏰', sticky: '📝',
+  cola: '🥤', watermelon: '🍉', popsicle: '🍦', fan: '🪭', soda: '🫧',
+  read: '💬', emoji: '😊', heart: '❤️', voice: '🎤', bottle: '🫙',
+  cookie: '🍪', muffin: '🧁',
+  wok: '🍳', pan: '🥘', pot: '🍲', egg: '🥚', spatula: '🥄', pepper: '🌶️',
+  goldenpie: '🥧', pie: '🥧', pancake: '🥞', tart: '🍮', donut: '🍩', popcorn: '🍿',
+  ppt: '📊',
+};
+
+/** 绘制完整消消乐方块 — 浅色方块 + 大号 emoji */
 export function drawCrystalTile(ctx, artKey, x, y, size, stunned = false) {
   const palette = PALETTES_BY_KEY[artKey];
-  const drawer = ICON_DRAWERS[artKey];
-  if (!palette || !drawer) return;
+  if (!palette) return;
 
   const blockSize = size * 0.92;
   const extraGlow = GLOW_KEYS.has(artKey);
@@ -527,22 +538,22 @@ export function drawCrystalTile(ctx, artKey, x, y, size, stunned = false) {
 
   drawMatchBlock(ctx, x, y, blockSize, palette, extraGlow);
 
-  // 白色图标底盘，保证图案与底色分离
-  const plateR = blockSize * 0.34;
+  const plateR = blockSize * 0.36;
   ctx.save();
   ctx.fillStyle = '#FFFFFF';
-  ctx.shadowColor = 'rgba(0,0,0,0.06)';
-  ctx.shadowBlur = blockSize * 0.04;
+  ctx.shadowColor = 'rgba(0,0,0,0.08)';
+  ctx.shadowBlur = blockSize * 0.05;
   ctx.beginPath();
   ctx.arc(x, y, plateR, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,0.04)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
   ctx.restore();
 
+  const emoji = TILE_EMOJI[artKey] || '✨';
   ctx.save();
-  drawer(ctx, x, y, blockSize * 0.72);
+  ctx.font = `${Math.floor(blockSize * 0.48)}px "Apple Color Emoji","Segoe UI Emoji",sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, x, y + blockSize * 0.02);
   ctx.restore();
 
   if (stunned) {
