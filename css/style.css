@@ -114,7 +114,7 @@ html, body {
   width: 52px;
   height: 52px;
   animation: float 2s ease-in-out infinite;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.12));
 }
 
 .preview-gem:nth-child(2) { animation-delay: 0.2s; }
@@ -325,6 +325,88 @@ html, body {
   font-size: 0.95rem;
 }
 
+/* 醒目关卡目标面板 */
+.goal-panel {
+  background: var(--bg-card-solid);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border: 2px solid rgba(255, 107, 157, 0.25);
+  box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
+}
+
+.goal-panel.goal-done {
+  border-color: rgba(102, 187, 106, 0.5);
+  box-shadow: 0 4px 16px rgba(102, 187, 106, 0.15);
+}
+
+.goal-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.goal-panel-icon {
+  font-size: 1.1rem;
+}
+
+.goal-panel-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.goal-main {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.goal-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.goal-progress-track {
+  flex: 1;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.goal-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #FF6B9D, #FFB74D);
+  border-radius: 5px;
+  transition: width 0.35s ease;
+}
+
+.goal-panel.goal-done .goal-progress-fill {
+  background: linear-gradient(90deg, #66BB6A, #81C784);
+}
+
+.goal-progress-pct {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 36px;
+  text-align: right;
+}
+
+.goal-sub {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
 .level-goal {
   display: block;
   font-size: 0.75rem;
@@ -385,7 +467,7 @@ html, body {
 
 #board-canvas {
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   touch-action: none;
 }
 
