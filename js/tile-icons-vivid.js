@@ -248,35 +248,64 @@ const ICONS = {
     strokeFill(ctx, '#FFCC80', '#E65100', s * 0.035);
   },
   wok(ctx, x, y, s) {
+    // 炒锅：深灰圆锅 + 橙色火焰
     ctx.beginPath();
-    ctx.ellipse(x, y + s * 0.05, s * 0.3, s * 0.18, 0, 0, Math.PI * 2);
-    strokeFill(ctx, '#546E7A', '#263238', s * 0.045);
+    ctx.ellipse(x, y + s * 0.08, s * 0.3, s * 0.16, 0, 0, Math.PI * 2);
+    strokeFill(ctx, '#455A64', '#1A237E', s * 0.045);
     ctx.beginPath();
-    ctx.moveTo(x - s * 0.32, y);
-    ctx.lineTo(x - s * 0.42, y - s * 0.05);
-    ctx.moveTo(x + s * 0.32, y);
-    ctx.lineTo(x + s * 0.42, y - s * 0.05);
+    ctx.moveTo(x - s * 0.32, y + s * 0.02);
+    ctx.lineTo(x - s * 0.45, y - s * 0.06);
     ctx.strokeStyle = '#37474F';
-    ctx.lineWidth = s * 0.05;
+    ctx.lineWidth = s * 0.055;
     ctx.stroke();
+    // 火焰
+    ctx.beginPath();
+    ctx.moveTo(x - s * 0.08, y + s * 0.02);
+    ctx.quadraticCurveTo(x - s * 0.12, y - s * 0.2, x, y - s * 0.28);
+    ctx.quadraticCurveTo(x + s * 0.12, y - s * 0.2, x + s * 0.08, y + s * 0.02);
+    strokeFill(ctx, '#FF7043', '#E64A19', s * 0.03);
   },
-  pan(ctx, x, y, s) { ICONS.wok(ctx, x, y, s); },
+  pan(ctx, x, y, s) {
+    // 平底锅：浅银圆盘 + 长柄（和炒锅明显不同）
+    ctx.beginPath();
+    ctx.arc(x - s * 0.06, y, s * 0.24, 0, Math.PI * 2);
+    strokeFill(ctx, '#B0BEC5', '#546E7A', s * 0.045);
+    ctx.beginPath();
+    ctx.arc(x - s * 0.06, y, s * 0.14, 0, Math.PI * 2);
+    strokeFill(ctx, '#ECEFF1', '#78909C', s * 0.03);
+    rr(ctx, x + s * 0.14, y - s * 0.04, s * 0.28, s * 0.08, s * 0.03);
+    strokeFill(ctx, '#8D6E63', '#4E342E', s * 0.03);
+  },
   pot(ctx, x, y, s) {
-    rr(ctx, x - s * 0.22, y - s * 0.1, s * 0.44, s * 0.32, s * 0.06);
+    rr(ctx, x - s * 0.22, y - s * 0.08, s * 0.44, s * 0.3, s * 0.06);
     strokeFill(ctx, '#5C6BC0', '#283593', s * 0.04);
     ctx.beginPath();
-    ctx.arc(x, y - s * 0.12, s * 0.2, Math.PI, 0);
+    ctx.arc(x, y - s * 0.1, s * 0.18, Math.PI, 0);
     ctx.strokeStyle = '#283593';
     ctx.lineWidth = s * 0.05;
     ctx.stroke();
   },
   egg(ctx, x, y, s) {
     ctx.beginPath();
-    ctx.ellipse(x, y, s * 0.2, s * 0.26, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y, s * 0.26, s * 0.3, 0, 0, Math.PI * 2);
     strokeFill(ctx, '#FFFDE7', '#F9A825', s * 0.04);
     ctx.beginPath();
-    ctx.arc(x, y + s * 0.02, s * 0.1, 0, Math.PI * 2);
-    strokeFill(ctx, '#FFD54F', '#F57F17', s * 0.03);
+    ctx.arc(x + s * 0.02, y + s * 0.02, s * 0.12, 0, Math.PI * 2);
+    strokeFill(ctx, '#FFD54F', '#F57F17', s * 0.035);
+  },
+  tomato(ctx, x, y, s) {
+    ctx.beginPath();
+    ctx.arc(x, y + s * 0.04, s * 0.26, 0, Math.PI * 2);
+    strokeFill(ctx, '#EF5350', '#C62828', s * 0.045);
+    ctx.beginPath();
+    ctx.moveTo(x, y - s * 0.18);
+    ctx.quadraticCurveTo(x + s * 0.1, y - s * 0.3, x + s * 0.04, y - s * 0.34);
+    ctx.strokeStyle = '#2E7D32';
+    ctx.lineWidth = s * 0.05;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(x - s * 0.08, y - s * 0.2, s * 0.08, s * 0.04, -0.4, 0, Math.PI * 2);
+    strokeFill(ctx, '#66BB6A', '#2E7D32', s * 0.025);
   },
   spatula(ctx, x, y, s) {
     rr(ctx, x - s * 0.12, y - s * 0.28, s * 0.24, s * 0.28, s * 0.04);
