@@ -1,4 +1,4 @@
-import { getTileDef } from './tile-sets.js';
+import { getTileDef } from './tile-sets.js?v=20260710d';
 
 export const LEVELS = [
   {
