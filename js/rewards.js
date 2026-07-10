@@ -1,7 +1,7 @@
 /**
  * 心理学奖励机制 — 可变比率强化 + 进度里程碑 + 连击多巴胺
  */
-import { randomSfxLine, showSfxToast, playWin } from './audio.js';
+import { randomSfxLine, showSfxToast, playWin } from './audio.js?v=20260710d';
 
 const COMBO_LINES = [
   '', 'Nice!', 'Double!', 'Triple!!', 'Ultra!!!', 'LEGEND!!!!',
