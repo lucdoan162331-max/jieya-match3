@@ -1,16 +1,16 @@
-import { Game, LEVELS, getGoalText } from './game.js';
-import { pickEnding } from './levels.js';
+import { Game, LEVELS } from './game.js';
+import { pickEnding, getGoalDetail } from './levels.js';
 import { SAVE_KEY, CAFFEINE_SHAKE_MS } from './config.js';
 import { drawCrystalTile } from './tile-art.js';
 import { getTileSet } from './tile-sets.js';
 import { HealingBackground } from './background.js';
+import { stopBgm } from './bgm.js';
 
 const bgCanvas = document.getElementById('bg-canvas');
 if (bgCanvas) new HealingBackground(bgCanvas).start();
 
 const screens = {
   start: document.getElementById('screen-start'),
-  rules: document.getElementById('screen-rules'),
   levels: document.getElementById('screen-levels'),
   game: document.getElementById('screen-game'),
   pause: document.getElementById('screen-pause'),
@@ -25,7 +25,7 @@ function showScreen(name) {
   Object.values(screens).forEach(s => {
     if (!s) return;
     s.classList.remove('active');
-    if (s.id === 'screen-rules' || s.id === 'screen-pause' ||
+    if (s.id === 'screen-pause' ||
         s.id === 'screen-level-clear' || s.id === 'screen-ending') {
       s.classList.add('hidden');
     }
@@ -125,36 +125,24 @@ function startGame(index) {
 
 function updateHUD(g) {
   document.getElementById('level-name').textContent = g.level.name;
-  document.getElementById('level-goal').textContent = getGoalText(g.level);
   document.getElementById('score').textContent = g.score;
   document.getElementById('stress-value').textContent = g.stress;
   document.getElementById('stress-bar').style.width = g.stress + '%';
   document.getElementById('moves-left').textContent = `剩余步数：${g.movesLeft}`;
 
-  const goal = g.level.goal;
-  let progressText = '';
-  switch (goal.type) {
-    case 'clear_total':
-      progressText = `已消除 ${g.progress.clearedTotal}/${goal.target}`;
-      break;
-    case 'clear_type':
-    case 'clear_type_stress':
-      progressText = `已消除 ${g.progress.clearedByType[goal.tile] || 0}/${goal.target}`;
-      break;
-    case 'trigger_caffeine':
-      progressText = `续命加速 ${g.progress.caffeineTriggers}/${goal.target}`;
-      break;
-    case 'pot_throw':
-      progressText = `锅锅弹射 ${g.progress.potThrows}/${goal.target}`;
-      break;
-    case 'pie_big_match':
-      progressText = `大饼泡泡 ${g.progress.bigPieMatches}/${goal.target}`;
-      break;
-    case 'score_stress':
-      progressText = `得分 ${g.score}/${goal.target}`;
-      break;
+  const detail = getGoalDetail(g.level, g.progress, g.score, g.stress);
+  document.getElementById('goal-main').textContent = detail.main;
+  document.getElementById('goal-sub').textContent = detail.sub;
+  document.getElementById('goal-progress-fill').style.width = detail.percent + '%';
+  document.getElementById('goal-progress-pct').textContent = Math.round(detail.percent) + '%';
+
+  const goalPanel = document.getElementById('goal-panel');
+  if (detail.percent >= 100) {
+    goalPanel.classList.add('goal-done');
+  } else {
+    goalPanel.classList.remove('goal-done');
   }
-  document.getElementById('moves-left').textContent = `剩余步数：${g.movesLeft} · ${progressText}`;
+
   updateBadges(g);
 }
 
@@ -254,16 +242,6 @@ document.getElementById('btn-start').addEventListener('click', () => {
   showScreen('levels');
 });
 
-document.getElementById('btn-how').addEventListener('click', () => {
-  screens.rules.classList.remove('hidden');
-  screens.rules.classList.add('active');
-});
-
-document.getElementById('btn-rules-close').addEventListener('click', () => {
-  screens.rules.classList.remove('active');
-  screens.rules.classList.add('hidden');
-});
-
 document.getElementById('btn-pause').addEventListener('click', () => {
   if (game) game.pause();
   screens.pause.classList.remove('hidden');
@@ -277,6 +255,7 @@ document.getElementById('btn-resume').addEventListener('click', () => {
 
 document.getElementById('btn-quit').addEventListener('click', () => {
   screens.pause.classList.add('hidden');
+  stopBgm();
   renderLevelList();
   showScreen('levels');
 });
