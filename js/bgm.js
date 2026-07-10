@@ -1,5 +1,5 @@
 /** 每关不同风格的轻快 BGM（Web Audio procedural） */
-import { resumeAudio } from './audio.js';
+import { resumeAudio } from './audio.js?v=20260710d';
 
 let ctx = null;
 let masterGain = null;
