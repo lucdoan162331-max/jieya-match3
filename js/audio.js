@@ -1,4 +1,4 @@
-import { SFX_LINES } from './config.js';
+import { SFX_LINES } from './config.js?v=20260710d';
 
 let audioCtx = null;
 let recentSfx = [];
