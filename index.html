@@ -23,20 +23,6 @@
           <canvas class="preview-gem" data-tile="4" width="64" height="64"></canvas>
         </div>
         <button id="btn-start" class="btn-primary">开始解压</button>
-        <button id="btn-how" class="btn-secondary">彩蛋机制说明</button>
-      </div>
-    </div>
-
-    <div id="screen-rules" class="screen overlay">
-      <div class="modal">
-        <h2>彩蛋机制一览</h2>
-        <ul class="rules-list">
-          <li><strong>☕ 续命加速</strong>：连消 3 组美式，屏幕轻轻抖一下，消除加速 180%</li>
-          <li><strong>🍳 锅锅弹射</strong>：把锅锅移到边缘，它会弹出去轻轻撞一下隔壁</li>
-          <li><strong>🥞 大饼泡泡</strong>：一次凑齐 5 个大饼，金色泡泡雨！狂点戳破超解压</li>
-          <li><strong>通关方式</strong>：7 个关卡各有小目标，结局由你的玩法决定</li>
-        </ul>
-        <button id="btn-rules-close" class="btn-primary">懂了，开玩！</button>
       </div>
     </div>
 
@@ -54,12 +40,26 @@
         <button id="btn-pause" class="btn-icon" aria-label="暂停">⏸</button>
         <div class="level-info">
           <span id="level-name" class="level-name"></span>
-          <span id="level-goal" class="level-goal"></span>
         </div>
         <div class="score-box">
           <span id="score" class="score">0</span>
         </div>
       </header>
+
+      <div id="goal-panel" class="goal-panel">
+        <div class="goal-panel-head">
+          <span class="goal-panel-icon">🎯</span>
+          <span class="goal-panel-label">本关目标</span>
+        </div>
+        <div id="goal-main" class="goal-main"></div>
+        <div class="goal-progress-wrap">
+          <div class="goal-progress-track">
+            <div id="goal-progress-fill" class="goal-progress-fill"></div>
+          </div>
+          <span id="goal-progress-pct" class="goal-progress-pct">0%</span>
+        </div>
+        <div id="goal-sub" class="goal-sub"></div>
+      </div>
 
         <div id="status-badges" class="status-badges"></div>
         <div id="combo-bar" class="combo-bar hidden">
