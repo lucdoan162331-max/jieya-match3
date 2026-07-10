@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#E8F4FF">
+  <title>精神状态消消乐</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="bg-canvas" class="bg-canvas"></canvas>
+  <div id="app">
+    <div id="screen-start" class="screen active">
+      <div class="start-content">
+        <h1 class="game-title">精神状态<br>消消乐</h1>
+        <p class="game-subtitle">连消解压，指尖冒泡泡～</p>
+        <div class="tile-preview">
+          <canvas class="preview-gem" data-tile="0" width="64" height="64"></canvas>
+          <canvas class="preview-gem" data-tile="1" width="64" height="64"></canvas>
+          <canvas class="preview-gem" data-tile="2" width="64" height="64"></canvas>
+          <canvas class="preview-gem" data-tile="3" width="64" height="64"></canvas>
+          <canvas class="preview-gem" data-tile="4" width="64" height="64"></canvas>
+        </div>
+        <button id="btn-start" class="btn-primary">开始解压</button>
+        <button id="btn-how" class="btn-secondary">彩蛋机制说明</button>
+      </div>
+    </div>
+
+    <div id="screen-rules" class="screen overlay">
+      <div class="modal">
+        <h2>彩蛋机制一览</h2>
+        <ul class="rules-list">
+          <li><strong>☕ 续命加速</strong>：连消 3 组美式，屏幕轻轻抖一下，消除加速 180%</li>
+          <li><strong>🍳 锅锅弹射</strong>：把锅锅移到边缘，它会弹出去轻轻撞一下隔壁</li>
+          <li><strong>🥞 大饼泡泡</strong>：一次凑齐 5 个大饼，金色泡泡雨！狂点戳破超解压</li>
+          <li><strong>通关方式</strong>：7 个关卡各有小目标，结局由你的玩法决定</li>
+        </ul>
+        <button id="btn-rules-close" class="btn-primary">懂了，开玩！</button>
+      </div>
+    </div>
+
+    <div id="screen-levels" class="screen">
+      <header class="level-header">
+        <h2>选择关卡</h2>
+        <p class="level-hint">每关元素主题不同 · 通关解锁专属结局</p>
+      </header>
+      <div id="level-list" class="level-list"></div>
+      <div id="stats-bar" class="stats-bar"></div>
+    </div>
+
+    <div id="screen-game" class="screen">
+      <header class="game-header">
+        <button id="btn-pause" class="btn-icon" aria-label="暂停">⏸</button>
+        <div class="level-info">
+          <span id="level-name" class="level-name"></span>
+          <span id="level-goal" class="level-goal"></span>
+        </div>
+        <div class="score-box">
+          <span id="score" class="score">0</span>
+        </div>
+      </header>
+
+        <div id="status-badges" class="status-badges"></div>
+        <div id="combo-bar" class="combo-bar hidden">
+          <span id="combo-label">连击</span>
+          <span id="combo-value">×1</span>
+        </div>
+
+      <div id="board-wrap" class="board-wrap">
+        <canvas id="board-canvas"></canvas>
+        <div id="board-overlay" class="board-overlay"></div>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-label">
+          <span>能量槽</span>
+          <span id="stress-value">0</span>
+        </div>
+        <div class="progress-track">
+          <div id="stress-bar" class="progress-fill stress"></div>
+        </div>
+      </div>
+
+      <div id="moves-left" class="moves-left"></div>
+    </div>
+
+    <div id="screen-meeting" class="screen overlay hidden">
+      <div class="meeting-bg"></div>
+      <div class="boss-shadow">🥞✨</div>
+      <div class="meeting-content">
+        <h2>大饼泡泡雨</h2>
+        <p class="meeting-text" id="meeting-text">泡泡要飞起来啦！</p>
+        <div class="tap-meter">
+          <div id="tap-progress" class="tap-progress"></div>
+        </div>
+        <p class="tap-hint">狂点屏幕戳泡泡！</p>
+        <div id="tap-count" class="tap-count">0 / 28</div>
+      </div>
+    </div>
+
+    <div id="screen-level-clear" class="screen overlay hidden">
+      <div class="modal result-modal">
+        <h2 id="clear-title">关卡完成！</h2>
+        <p id="clear-desc" class="clear-desc"></p>
+        <div id="clear-stats" class="clear-stats"></div>
+        <button id="btn-next-level" class="btn-primary">下一关</button>
+        <button id="btn-level-select" class="btn-secondary">关卡选择</button>
+      </div>
+    </div>
+
+    <div id="screen-ending" class="screen overlay hidden">
+      <div class="modal ending-modal">
+        <div id="ending-badge" class="ending-badge"></div>
+        <h2 id="ending-title"></h2>
+        <p id="ending-desc"></p>
+        <div id="ending-stats" class="ending-stats"></div>
+        <button id="btn-replay" class="btn-primary">再来一局</button>
+        <button id="btn-share" class="btn-secondary">复制战绩</button>
+      </div>
+    </div>
+
+    <div id="screen-pause" class="screen overlay hidden">
+      <div class="modal">
+        <h2>小憩一下</h2>
+        <button id="btn-resume" class="btn-primary">继续玩</button>
+        <button id="btn-quit" class="btn-secondary">返回选关</button>
+      </div>
+    </div>
+
+    <div id="sfx-toast" class="sfx-toast"></div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
