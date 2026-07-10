@@ -1,4 +1,5 @@
-import * as Extra from './tile-icons-extra.js';
+import * as Extra from './tile-icons-extra.js?v=20260710d';
+import { drawVividIcon } from './tile-icons-vivid.js?v=20260710d';
 
 /** 浅色消消乐方块调色板 — bg 极浅底，border 描边，accent 点缀 */
 export const PALETTES_BY_KEY = {
@@ -508,19 +509,7 @@ function drawMatchBlock(ctx, x, y, size, palette, extraGlow = false) {
   ctx.restore();
 }
 
-/** 大号 emoji 保证手机上一眼可辨 */
-const TILE_EMOJI = {
-  coffee: '☕', americano: '☕', latte: '🧋', energy: '⚡',
-  toast: '🍞', sun: '☀️', alarm: '⏰', sticky: '📝',
-  cola: '🥤', watermelon: '🍉', popsicle: '🍦', fan: '🪭', soda: '🫧',
-  read: '💬', emoji: '😊', heart: '❤️', voice: '🎤', bottle: '🫙',
-  cookie: '🍪', muffin: '🧁',
-  wok: '🍳', pan: '🥘', pot: '🍲', egg: '🥚', spatula: '🥄', pepper: '🌶️',
-  goldenpie: '🥧', pie: '🥧', pancake: '🥞', tart: '🍮', donut: '🍩', popcorn: '🍿',
-  ppt: '📊',
-};
-
-/** 绘制完整消消乐方块 — 浅色方块 + 大号 emoji */
+/** 绘制完整消消乐方块 — 浅色方块 + 高对比彩色图标（不用 emoji，避免 iOS 灰剪影） */
 export function drawCrystalTile(ctx, artKey, x, y, size, stunned = false) {
   const palette = PALETTES_BY_KEY[artKey];
   if (!palette) return;
@@ -538,23 +527,21 @@ export function drawCrystalTile(ctx, artKey, x, y, size, stunned = false) {
 
   drawMatchBlock(ctx, x, y, blockSize, palette, extraGlow);
 
-  const plateR = blockSize * 0.36;
+  // 白底圆盘
+  const plateR = blockSize * 0.38;
   ctx.save();
   ctx.fillStyle = '#FFFFFF';
-  ctx.shadowColor = 'rgba(0,0,0,0.08)';
-  ctx.shadowBlur = blockSize * 0.05;
+  ctx.shadowColor = 'rgba(0,0,0,0.1)';
+  ctx.shadowBlur = blockSize * 0.06;
   ctx.beginPath();
   ctx.arc(x, y, plateR, 0, Math.PI * 2);
   ctx.fill();
+  ctx.strokeStyle = palette.border;
+  ctx.lineWidth = Math.max(1.5, blockSize * 0.03);
+  ctx.stroke();
   ctx.restore();
 
-  const emoji = TILE_EMOJI[artKey] || '✨';
-  ctx.save();
-  ctx.font = `${Math.floor(blockSize * 0.48)}px "Apple Color Emoji","Segoe UI Emoji",sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(emoji, x, y + blockSize * 0.02);
-  ctx.restore();
+  drawVividIcon(ctx, artKey, x, y, blockSize * 0.78);
 
   if (stunned) {
     ctx.restore();
