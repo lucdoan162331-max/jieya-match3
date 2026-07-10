@@ -57,13 +57,13 @@ export class HealingBackground {
         flap: Math.random() * Math.PI * 2,
       });
     }
-    // 萌宠：雪人、可乐杯、吐司君、星星抱枕
+    // 萌宠放在两侧与顶部，避免被棋盘挡住
     this.mascots = [
-      { type: 'snowman', x: 0.12, y: 0.78, scale: 1, phase: 0, action: 'bounce' },
-      { type: 'cola', x: 0.82, y: 0.76, scale: 0.9, phase: 1.2, action: 'thumbs' },
-      { type: 'toast', x: 0.35, y: 0.82, scale: 0.85, phase: 2.5, action: 'jump' },
-      { type: 'star', x: 0.62, y: 0.8, scale: 0.8, phase: 0.8, action: 'wave' },
-      { type: 'mug', x: 0.5, y: 0.85, scale: 0.75, phase: 3.1, action: 'bounce' },
+      { type: 'snowman', x: 0.08, y: 0.42, scale: 1.35, phase: 0, action: 'bounce' },
+      { type: 'cola', x: 0.92, y: 0.38, scale: 1.25, phase: 1.2, action: 'thumbs' },
+      { type: 'toast', x: 0.1, y: 0.62, scale: 1.15, phase: 2.5, action: 'jump' },
+      { type: 'star', x: 0.9, y: 0.58, scale: 1.2, phase: 0.8, action: 'wave' },
+      { type: 'mug', x: 0.5, y: 0.12, scale: 1.1, phase: 3.1, action: 'bounce' },
     ];
   }
 
