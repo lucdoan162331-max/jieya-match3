@@ -1,10 +1,10 @@
-import { Game, LEVELS } from './game.js';
-import { pickEnding, getGoalDetail } from './levels.js';
-import { SAVE_KEY, CAFFEINE_SHAKE_MS } from './config.js';
-import { drawCrystalTile } from './tile-art.js';
-import { getTileSet } from './tile-sets.js';
-import { HealingBackground } from './background.js';
-import { stopBgm } from './bgm.js';
+import { Game, LEVELS } from './game.js?v=20260710d';
+import { pickEnding, getGoalDetail } from './levels.js?v=20260710d';
+import { SAVE_KEY, CAFFEINE_SHAKE_MS } from './config.js?v=20260710d';
+import { drawCrystalTile } from './tile-art.js?v=20260710d';
+import { getTileSet } from './tile-sets.js?v=20260710d';
+import { HealingBackground } from './background.js?v=20260710d';
+import { stopBgm } from './bgm.js?v=20260710d';
 
 const bgCanvas = document.getElementById('bg-canvas');
 if (bgCanvas) new HealingBackground(bgCanvas).start();
