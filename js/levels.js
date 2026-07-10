@@ -1,54 +1,59 @@
-import { getTileDef } from './tile-sets.js?v=20260710d';
+import { getTileDef } from './tile-sets.js?v=20260710e';
 
+/**
+ * 难度曲线：
+ * 1 教学宽松 → 2 定向消除 → 3 能量约束 → 4 机制教学
+ * → 5 操作技巧 → 6 大招条件 → 7 综合挑战
+ */
 export const LEVELS = [
   {
     id: 1, name: '早安元气弹', tileSet: 'morning',
-    desc: '消除 30 个方块，唤醒手指～',
-    goal: { type: 'clear_total', target: 30 },
-    moves: 25, stressPerMove: 2,
-    tip: '续命美式、烤吐司、小太阳……每关元素都不一样哦！',
+    desc: '消除 25 个方块',
+    goal: { type: 'clear_total', target: 25 },
+    moves: 30, stressPerMove: 1,
+    tip: '轻松开局：随便消就行，熟悉手感～',
   },
   {
     id: 2, name: '夏日冰爽局', tileSet: 'summer',
-    desc: '消除 20 个冰爽可乐',
-    goal: { type: 'clear_type', tile: 0, target: 20 },
-    moves: 22, stressPerMove: 2,
-    tip: '夏天就要冰可乐、西瓜、冰棍！一口下去透心凉～',
+    desc: '消除 16 个冰爽可乐',
+    goal: { type: 'clear_type', tile: 0, target: 16 },
+    moves: 26, stressPerMove: 2,
+    tip: '开始要盯着目标元素消啦！',
   },
   {
     id: 3, name: '消息小精灵', tileSet: 'chat',
-    desc: '消除 15 个已读不回，能量槽≤60',
-    goal: { type: 'clear_type_stress', tile: 0, target: 15, maxStress: 60 },
-    moves: 20, stressPerMove: 3,
-    tip: '表情包、小红心、漂流瓶……把消息泡泡全戳破！',
+    desc: '消除 12 个已读不回，能量≤55',
+    goal: { type: 'clear_type_stress', tile: 0, target: 12, maxStress: 55 },
+    moves: 22, stressPerMove: 3,
+    tip: '步数更紧，还要管住能量槽！',
   },
   {
     id: 4, name: '咖啡因乐园', tileSet: 'caffeine',
     desc: '触发 1 次续命加速',
     goal: { type: 'trigger_caffeine', target: 1 },
-    moves: 25, stressPerMove: 2,
-    tip: '连消 3 组带咖啡因的方块，超速模式启动！',
+    moves: 24, stressPerMove: 2,
+    tip: '连消 3 组咖啡因方块，触发加速！',
   },
   {
     id: 5, name: '锅锅弹射乐园', tileSet: 'kitchen',
-    desc: '锅锅弹射成功 3 次',
-    goal: { type: 'pot_throw', target: 3 },
-    moves: 22, stressPerMove: 3,
-    tip: '把锅锅移到边缘，看它弹出去～duang！',
+    desc: '锅锅弹射成功 2 次',
+    goal: { type: 'pot_throw', target: 2 },
+    moves: 24, stressPerMove: 2,
+    tip: '把带火焰的锅锅滑到边缘，弹射！',
   },
   {
     id: 6, name: '黄金甜点屋', tileSet: 'golden',
     desc: '触发 1 次大饼泡泡',
     goal: { type: 'pie_big_match', target: 1 },
-    moves: 24, stressPerMove: 3,
-    tip: '一次凑齐 5 个黄金大饼，泡泡雨来袭！',
+    moves: 26, stressPerMove: 2,
+    tip: '一次凑齐 5 个大饼，金色泡泡雨！',
   },
   {
     id: 7, name: '终极解压派对', tileSet: 'finale',
-    desc: '得分 5000，能量槽≤80',
-    goal: { type: 'score_stress', target: 5000, maxStress: 80 },
-    moves: 30, stressPerMove: 2,
-    tip: '混搭所有主题元素，你的结局由这一局决定！',
+    desc: '得分 4000，能量≤75',
+    goal: { type: 'score_stress', target: 4000, maxStress: 75 },
+    moves: 28, stressPerMove: 2,
+    tip: '综合考验：分数与能量双线达标！',
   },
 ];
 
@@ -89,7 +94,6 @@ export function getGoalText(level) {
   }
 }
 
-/** 关卡目标进度详情 — 供 HUD 大面板使用 */
 export function getGoalDetail(level, progress, score, stress) {
   const g = level.goal;
   const tileName = (i) => getTileDef(level.tileSet, i).name;
