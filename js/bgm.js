@@ -21,7 +21,7 @@ function getAudio() {
   if (!ctx) {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = ctx.createGain();
-    masterGain.gain.value = 0.055;
+    masterGain.gain.value = 0.14;
     masterGain.connect(ctx.destination);
   }
   return ctx;
